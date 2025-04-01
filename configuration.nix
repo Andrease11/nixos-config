@@ -46,8 +46,6 @@
     LC_TIME = "it_IT.UTF-8";
   };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
 
   hardware.nvidia = {
 	modesetting.enable = true;
@@ -63,8 +61,21 @@
 	nvidiaBusId = "PCI:01:0:0";
   };
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services.xserver = {
+	enable = true;
+	displayManager.gdm = {
+		enable = true;
+		wayland = true;
+	};
+	desktopManager.gnome = {
+		enable = true;
+		extraGSettingsOverridePackages = [pkgs.mutter];
+		extraGSettingsOverrides = ''
+			[org.gnome.mutter]
+			experimental-features=['scale-monitor-framebuffer']
+		'';
+	};
+  };
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -142,7 +153,9 @@
      beekeeper-studio
      unzip
      rustup
-  ];
+     vimPlugins.LazyVim
+     ripgrep
+     ];
 
   fonts.packages = with pkgs; [
   	nerd-fonts._0xproto
