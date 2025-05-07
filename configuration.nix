@@ -6,6 +6,10 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./neovim.nix
+      ./direnv.nix
+      ./home.nix
+      <home-manager/nixos>
     ];
   nix = {
 	gc ={
@@ -105,56 +109,30 @@
     #media-session.enable = true;
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.andrea = {
-    isNormalUser = true;
-    description = "Andrea Segalotti";
-    extraGroups = [ "networkmanager" "wheel" "docker" ];
-    packages = with pkgs; [
-    #  thunderbird
-    ];
-  };
-
-  # Install firefox.
   programs.firefox.enable = true;
   programs.nix-ld.enable = true;
-
-  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-     neovim
      wget
      google-chrome
      git
      gh
-     lazygit
-     vimPlugins.fzf-lua
-     vimPlugins.LazyVim
      gcc
      vesktop
      devenv
-     direnv
      lshw
      gnomeExtensions.astra-monitor
      gnomeExtensions.clipboard-indicator
      nix
      nodejs
      pnpm
-     fzf
      python313
-     fd
-     xclip
-     beekeeper-studio
      unzip
      rustup
-     vimPlugins.LazyVim
-     ripgrep
      ];
 
   fonts.packages = with pkgs; [
