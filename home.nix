@@ -1,15 +1,19 @@
-{ config, pkgs, ... }:
+{ ... }:
 
 {
   users.users.andrea = {
     isNormalUser = true;
     description = "Andrea Segalotti";
-    extraGroups = [ "networkmanager" "wheel" "docker" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "kvm" "adbusers"  ];
   };
 
   home-manager.users.andrea = {pkgs, ...}: {
-    programs.bash.enable = true;
-
+    programs.bash = {
+      enable = true;
+      bashrcExtra = ''
+      export ANDROID_HOME=/home/andrea/Android/Sdk
+      '';
+    };
     programs.fzf = {
       enable = true;
       enableBashIntegration = true;

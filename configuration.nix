@@ -1,7 +1,6 @@
 # Edit this configuration file to define what should be installed on your system.  Help is available in the configuration.nix(5) man page and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, ... }:
-
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -53,34 +52,33 @@
 
   hardware.nvidia = {
 	modesetting.enable = true;
-	powerManagement.enable = false;
+	powerManagement.enable = true;
 	powerManagement.finegrained = false;
 	open = true;
 	nvidiaSettings = true;
-	package = config.boot.KernelPackages.nvidiaPackages.stable;
+	package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
-  hardware.nvidia.prime = {
-	sync.enable = true;	
-
-	nvidiaBusId = "PCI:01:0:0";
-  };
+   
   # Enable the GNOME Desktop Environment.
   services.xserver = {
 	enable = true;
-	displayManager.gdm = {
-		enable = true;
-		wayland = true;
-	};
-	desktopManager.gnome = {
-		enable = true;
-		extraGSettingsOverridePackages = [pkgs.mutter];
-		extraGSettingsOverrides = ''
-			[org.gnome.mutter]
-			experimental-features=['scale-monitor-framebuffer']
-		'';
-	};
+  videoDrivers = [ "nvidia" ];
   };
 
+  services = {
+    displayManager.gdm = {
+      enable = true;
+      wayland = true;
+    };
+    desktopManager.gnome = {
+      enable = true;
+      extraGSettingsOverridePackages = [pkgs.mutter];
+      extraGSettingsOverrides = ''
+        [org.gnome.mutter]
+        experimental-features=['scale-monitor-framebuffer']
+      '';
+	};
+  };
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "it";
@@ -114,7 +112,12 @@
   programs.nix-ld.enable = true;
   nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
+  programs.steam = {
+  enable = true;
+  remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+  dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+  localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+  };  # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
      wget
@@ -123,20 +126,28 @@
      gh
      gcc
      vesktop
-     devenv
      lshw
      gnomeExtensions.astra-monitor
      gnomeExtensions.clipboard-indicator
      nix
+     devenv
+     claude-code
      nodejs
      pnpm
+     android-studio
      python313
      unzip
      rustup
+     telegram-desktop
+     whatsapp-for-linux
+     lutris
      ];
+
+  nixpkgs.config.android_sdk.accept_license = true;
 
   fonts.packages = with pkgs; [
   	nerd-fonts._0xproto
+    corefonts
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

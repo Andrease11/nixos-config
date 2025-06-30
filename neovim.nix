@@ -2,15 +2,11 @@
 
 {
 	environment.systemPackages = with pkgs; [
-		neovim
 		fd
     lazygit
-    vimPlugins.fzf-lua
-    vimPlugins.LazyVim
     git
     gcc
     nodejs
-    vimPlugins.LazyVim
     rustup
     ripgrep
     xclip
