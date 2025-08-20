@@ -58,7 +58,7 @@
 	nvidiaSettings = true;
 	package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
-   
+  hardware.graphics.enable = true;
   # Enable the GNOME Desktop Environment.
   services.xserver = {
 	enable = true;
@@ -141,6 +141,8 @@
      telegram-desktop
      whatsapp-for-linux
      lutris
+     playwright
+     playwright-test
      ];
 
   nixpkgs.config.android_sdk.accept_license = true;

@@ -12,6 +12,12 @@
       enable = true;
       bashrcExtra = ''
       export ANDROID_HOME=/home/andrea/Android/Sdk
+
+      export PNPM_HOME="$HOME/.local/share/pnpm"
+      case ":$PATH:" in
+        *":$PNPM_HOME:"*) ;;
+        *) export PATH="$PNPM_HOME:$PATH" ;;
+      esac
       '';
     };
     programs.fzf = {
