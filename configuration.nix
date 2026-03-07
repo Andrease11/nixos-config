@@ -10,11 +10,13 @@
       ./home.nix
     ];
   nix = {
-	gc ={
-		automatic = true;
-		dates = "weekly";
-		options = "--delete-older-than30d";
-  	}; 
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 30d";
+    };
+    settings.experimental-features = [ "nix-command" "flakes" ];
+    settings.auto-optimise-store = true;
   };
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -61,8 +63,8 @@
   hardware.graphics.enable = true;
   # Enable the GNOME Desktop Environment.
   services.xserver = {
-	enable = true;
-  videoDrivers = [ "nvidia" ];
+    enable = true;
+    videoDrivers = [ "nvidia" ];
   };
 
   services = {
@@ -72,9 +74,8 @@
     };
     desktopManager.gnome = {
       enable = true;
-      extraGSettingsOverridePackages = [pkgs.mutter];
-     
-	};
+      extraGSettingsOverridePackages = [ pkgs.mutter ];
+    };
   };
   # Configure keymap in X11
   services.xserver.xkb = {

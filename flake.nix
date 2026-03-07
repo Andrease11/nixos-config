@@ -2,10 +2,9 @@
   description = "NixOS system configuration";
 
   inputs = {
-    # Current running NixOS revision from `nixos-version --json`.
-    nixpkgs.url = "github:NixOS/nixpkgs/30e2e2857ba47844aa71991daa6ed1fc678bcbb7";
+    # Pin exactly to the currently running NixOS nixpkgs revision.
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
 
-    # Keep Home Manager aligned with the current NixOS release family.
     home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
