@@ -14,13 +14,13 @@
 	gc ={
 		automatic = true;
 		dates = "weekly";
-		options="--delete-older-than30d";
+		options= "--delete-older-than30d";
   	}; 
   };
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
+  
   virtualisation.docker.enable = true;
   nix.extraOptions = ''
   trusted-users = root andrea 
@@ -30,7 +30,7 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-
+  services.flatpak.enable = true;
   # Set your time zone.
   time.timeZone = "Europe/Rome";
 
@@ -50,6 +50,7 @@
   };
 
 
+  hardware.bluetooth.enable = true;
   hardware.nvidia = {
 	modesetting.enable = true;
 	powerManagement.enable = true;
@@ -136,16 +137,20 @@
      pnpm
      android-studio
      python313
+     uv
      unzip
      rustup
      telegram-desktop
-     whatsapp-for-linux
      lutris
      playwright
      playwright-test
-     ];
+     rpcs3
+     heroic
+     bluez
+exercism
+    ];
 
-  nixpkgs.config.android_sdk.accept_license = true;
+nixpkgs.config.android_sdk.accept_license = true;
 
   fonts.packages = with pkgs; [
   	nerd-fonts._0xproto
