@@ -8,13 +8,12 @@
       ./neovim.nix
       ./direnv.nix
       ./home.nix
-      <home-manager/nixos>
     ];
   nix = {
 	gc ={
 		automatic = true;
 		dates = "weekly";
-		options= "--delete-older-than30d";
+		options = "--delete-older-than30d";
   	}; 
   };
   # Bootloader.
@@ -74,10 +73,7 @@
     desktopManager.gnome = {
       enable = true;
       extraGSettingsOverridePackages = [pkgs.mutter];
-      extraGSettingsOverrides = ''
-        [org.gnome.mutter]
-        experimental-features=['scale-monitor-framebuffer']
-      '';
+     
 	};
   };
   # Configure keymap in X11
