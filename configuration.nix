@@ -2,6 +2,7 @@
 
 { config, pkgs, ... }:
 {
+#riparazione boot
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -56,9 +57,9 @@
 	modesetting.enable = true;
 	powerManagement.enable = true;
 	powerManagement.finegrained = false;
-	open = true;
+	open = false;
 	nvidiaSettings = true;
-	package = config.boot.kernelPackages.nvidiaPackages.stable;
+	package = config.boot.kernelPackages.nvidiaPackages.production;
   };
   hardware.graphics.enable = true;
   # Enable the GNOME Desktop Environment.
@@ -137,7 +138,6 @@
      uv
      unzip
      rustup
-     telegram-desktop
      lutris
      playwright
      playwright-test
