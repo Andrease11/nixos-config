@@ -1,49 +1,60 @@
-# NixOS Flake Update Guide
+# NixOS Config (Flake)
 
-Questa repo usa i flake con `flake.lock`: i rebuild sono riproducibili finche il lock non cambia.
+Repo NixOS con struttura multi-host e Home Manager integrato.
 
-## Regola base
+## Host disponibili
 
-- `sudo nixos-rebuild switch --flake /etc/nixos#nixos` usa automaticamente `flake.lock`. Usa l'alias nrs per usarlo 
-- Se non lanci `nix flake update`, le versioni restano bloccate.
+- `personal-pc`: macchina principale desktop (GNOME, NVIDIA, gaming, audio).
+- `work-wsl`: profilo per NixOS-WSL (terminale su Windows, senza stack desktop/hardware fisico).
+- `nixos`: alias legacy che punta a `personal-pc`.
 
-## Workflow sicuro di update
+## Struttura repository
 
-Usa sempre questi comandi (con feature flags esplicite):
+- `flake.nix`: input/output del flake (`nixpkgs`, `home-manager`, `nixos-wsl`).
+- `hosts/`: entrypoint per host (`hosts/personal-pc/default.nix`, `hosts/work-wsl/default.nix`).
+- `modules/system/common/`: moduli condivisi tra host (base, direnv, pacchetti comuni, tool Neovim).
+- `modules/system/personal-pc/`: moduli solo desktop personale.
+- `modules/system/work-wsl/`: moduli solo WSL.
+- `modules/home/common/`: configurazioni Home Manager condivise (bash, fzf, neovim).
+- `modules/home/profiles/`: differenze Home Manager per host.
+- `nvim/`: configurazione Neovim condivisa e linkata in `~/.config/nvim` via Home Manager.
 
-```bash
-nix --extra-experimental-features 'nix-command flakes' flake update nixpkgs /etc/nixos
-nix --extra-experimental-features 'nix-command flakes' flake update home-manager /etc/nixos
-sudo nixos-rebuild test --flake /etc/nixos#nixos
-sudo nixos-rebuild switch --flake /etc/nixos#nixos
-```
+## Rebuild
 
-Se il test fallisce, non fare `switch`: il sistema attuale resta invariato.
-
-## Passare a branch stabile 25.11
-
-1. Modifica `flake.nix`:
-   - `nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";`
-   - `home-manager.url = "github:nix-community/home-manager/release-25.11";`
-2. Aggiorna il lock:
+Comandi espliciti:
 
 ```bash
-nix --extra-experimental-features 'nix-command flakes' flake update /etc/nixos
+sudo nixos-rebuild switch --flake path:/etc/nixos#personal-pc
+sudo nixos-rebuild switch --flake path:/etc/nixos#work-wsl
 ```
 
-3. Verifica e applica:
+Scorciatoia shell (definita in Home Manager):
 
 ```bash
-sudo nixos-rebuild test --flake /etc/nixos#nixos
-sudo nixos-rebuild switch --flake /etc/nixos#nixos
+nrs
+nrs personal-pc
+nrs work-wsl
 ```
+
+`nrs` usa `hostname` se non passi argomenti.
+
+## Aggiornamento lock file
+
+Le versioni restano bloccate finche non aggiorni `flake.lock`.
+
+```bash
+nix flake update --flake /etc/nixos
+nix flake check --no-build path:/etc/nixos
+sudo nixos-rebuild test --flake path:/etc/nixos#personal-pc
+sudo nixos-rebuild switch --flake path:/etc/nixos#personal-pc
+```
+
+Per WSL sostituisci l'host con `#work-wsl`.
 
 ## Rollback rapido
-
-Se qualcosa va storto dopo uno switch:
 
 ```bash
 sudo nixos-rebuild switch --rollback
 ```
 
-Oppure scegli la generazione precedente dal bootloader.
+In alternativa, scegli una generazione precedente dal bootloader.
