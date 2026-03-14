@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 
 {
   programs.neovim = {
@@ -6,5 +6,5 @@
     defaultEditor = true;
   };
 
-  xdg.configFile."nvim".source = ../../../nvim;
+  xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/nvim";
 }

@@ -12,4 +12,12 @@
     ripgrep
     xclip
   ];
+
+  system.activationScripts.nvimConfigPermissions.text = ''
+    if [ -d /etc/nixos/nvim ]; then
+      chown -R andrea:users /etc/nixos/nvim
+      chmod -R u+rwX,go+rX /etc/nixos/nvim
+      chmod u+w /etc/nixos/nvim
+    fi
+  '';
 }
