@@ -18,9 +18,6 @@
     '';
   };
 
-  networking.hostName = "nixos";
-  networking.networkmanager.enable = true;
-
   time.timeZone = "Europe/Rome";
 
   i18n.defaultLocale = "en_US.UTF-8";
@@ -35,6 +32,4 @@
     LC_TELEPHONE = "it_IT.UTF-8";
     LC_TIME = "it_IT.UTF-8";
   };
-
-  console.keyMap = "it2";
 }

@@ -1,6 +1,8 @@
 { pkgs, ... }:
 
 {
+  networking.networkmanager.enable = true;
+
   services.flatpak.enable = true;
 
   services.xserver = {
@@ -21,4 +23,6 @@
     enable = true;
     extraGSettingsOverridePackages = [ pkgs.mutter ];
   };
+
+  console.keyMap = "it2";
 }
