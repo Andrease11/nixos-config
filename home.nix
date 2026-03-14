@@ -7,7 +7,11 @@
     extraGroups = [ "networkmanager" "wheel" "docker" "kvm" "adbusers"  ];
   };
 
-  home-manager.users.andrea = {pkgs, ...}: {
+  home-manager.users.andrea = { config, pkgs, ... }: {
+    imports = [
+      ./modules/home/neovim.nix
+    ];
+
     programs.bash = {
       enable = true;
       shellAliases = {
@@ -29,6 +33,8 @@
     };
 
     home.stateVersion = "24.11";
+
+    home.file."nixos".source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos";
 
   };
   home-manager.backupFileExtension = "backup";

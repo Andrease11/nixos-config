@@ -6,8 +6,8 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./neovim.nix
-      ./direnv.nix
+      ./modules/system/neovim.nix
+      ./modules/system/direnv.nix
       ./home.nix
     ];
   nix = {
@@ -22,7 +22,6 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
   
   virtualisation.docker.enable = true;
   nix.extraOptions = ''
