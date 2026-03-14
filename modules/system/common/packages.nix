@@ -15,6 +15,6 @@
     uv
     unzip
     rustup
-    exercism
+    opencode
   ];
 }
