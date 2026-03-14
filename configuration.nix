@@ -5,16 +5,7 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./modules/system/base.nix
-    ./modules/system/desktop.nix
-    ./modules/system/audio.nix
-    ./modules/system/gpu-nvidia.nix
-    ./modules/system/gaming.nix
-    ./modules/system/packages.nix
-    ./modules/system/fonts.nix
-    ./modules/system/docker.nix
-    ./modules/system/neovim.nix
-    ./modules/system/direnv.nix
+    ./modules/system
     ./home.nix
   ];
 

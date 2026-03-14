@@ -8,9 +8,7 @@
   };
 
   home-manager.users.andrea = { config, pkgs, ... }: {
-    imports = [
-      ./modules/home/neovim.nix
-    ];
+    imports = [ ./modules/home ];
 
     programs.bash = {
       enable = true;
