@@ -15,7 +15,7 @@
     programs.bash = {
       enable = true;
       shellAliases = {
-        nrs = "sudo nixos-rebuild switch --flake /etc/nixos#nixos";
+        nrs = "sudo nixos-rebuild switch --flake path:/etc/nixos#nixos";
       };
       bashrcExtra = ''
       export ANDROID_HOME=/home/andrea/Android/Sdk
