@@ -4,6 +4,7 @@
   inputs = {
     # Pin exactly to the currently running NixOS nixpkgs revision.
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
     home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -13,7 +14,7 @@
   };
 
   outputs =
-    {
+    inputs@{
       nixpkgs,
       home-manager,
       nixos-wsl,
@@ -23,6 +24,7 @@
       mkSystem = modules:
         nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
           inherit modules;
         };
     in

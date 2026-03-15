@@ -1,5 +1,11 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
+let
+  pkgsUnstable = import inputs.nixpkgs-unstable {
+    system = pkgs.system;
+    config = pkgs.config;
+  };
+in
 {
   environment.systemPackages = with pkgs; [
     wget
@@ -15,6 +21,9 @@
     uv
     unzip
     rustup
-    opencode
+    dotnet-runtime_9
+    csharpier
+  ] ++ [
+    pkgsUnstable.opencode
   ];
 }
