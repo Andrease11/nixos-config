@@ -8,8 +8,8 @@ return {
       },
       formatters = {
         csharpier = {
-          command = "/run/current-system/sw/bin/csharpier",
-          args = { "--write", "$FILENAME" },
+          command = "/run/current-system/sw/bin/csharpier-net9",
+          args = { "format", "$FILENAME" },
           stdin = false,
         },
       },
