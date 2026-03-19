@@ -17,6 +17,7 @@ in
     git
     gh
     gcc
+    tmux
     nix
     devenv
     claude-code
