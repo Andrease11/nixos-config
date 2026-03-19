@@ -43,6 +43,8 @@ nrs work-wsl
 Le versioni restano bloccate finche non aggiorni `flake.lock`.
 
 ```bash
+
+
 nix flake update --flake /etc/nixos
 nix flake check --no-build path:/etc/nixos
 sudo nixos-rebuild test --flake path:/etc/nixos#personal-pc
