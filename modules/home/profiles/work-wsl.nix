@@ -41,8 +41,8 @@ in
       enable = true;
       includes = [
         {
-          condition = "gitdir:/etc/nixos/";
-          path = "~/.gitconfig-github";
+          condition = "gitdir:/etc/nixos/.git";
+          path = "~/.config/git/config-github";
         }
       ];
       settings = {
@@ -57,7 +57,7 @@ in
       agenix-work = "sudo EDITOR=nvim VISUAL=nvim agenix -i /etc/agenix/work-wsl.agekey";
     };
 
-    home.file.".gitconfig-github".text = ''
+    xdg.configFile."git/config-github".text = ''
       [user]
         name = Andrea Segalotti
         email = 249976131+asegalotti@users.noreply.github.com
