@@ -1,0 +1,18 @@
+*.agekey
+
+# Plaintext secret drafts and accidental exports
+secrets/*.yml
+secrets/*.yaml
+secrets/*.json
+secrets/*.env
+
+# Keep encrypted secrets and templates tracked
+!secrets/*.age
+!secrets/*.example
+
+# Common editor/merge leftovers around secrets
+secrets/*.bak
+secrets/*.orig
+secrets/*.rej
+secrets/*.tmp
+secrets/*.swp

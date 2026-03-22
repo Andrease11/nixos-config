@@ -6,5 +6,6 @@
     ./packages.nix
     ./direnv.nix
     ./neovim.nix
+    ./secrets.nix
   ];
 }

@@ -1,14 +1,40 @@
-{ config, ... }:
+{ config, lib, ... }:
+
+let
+  githubSecretFile = ../../../secrets/personal-pc-github-hosts.yml.age;
+  githubSecretExists = builtins.pathExists githubSecretFile;
+in
 
 {
+  age.identityPaths = [ "/etc/agenix/personal-pc.agekey" ];
+
+  age.secrets.personalGithubHosts = lib.mkIf githubSecretExists {
+    file = githubSecretFile;
+    owner = "andrea";
+    group = "users";
+    mode = "0400";
+  };
+
   users.users.andrea = {
     isNormalUser = true;
     description = "Andrea Segalotti";
     extraGroups = [ "networkmanager" "wheel" "docker" "kvm" "adbusers" ];
   };
 
+  systemd.tmpfiles.rules = [
+    "d /etc/agenix 0700 root root -"
+  ];
+
   home-manager.users.andrea = { config, ... }: {
     imports = [ ../common ];
+
+    programs.bash.shellAliases = {
+      agenix-personal = "agenix -i ~/.config/agenix/personal-pc.agekey";
+    };
+
+    xdg.configFile."gh/hosts.yml" = lib.mkIf githubSecretExists {
+      source = config.lib.file.mkOutOfStoreSymlink "/run/agenix/personalGithubHosts";
+    };
 
     programs.bash.bashrcExtra = ''
       export ANDROID_HOME=/home/andrea/Android/Sdk
