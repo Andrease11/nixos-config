@@ -1,6 +1,11 @@
 { ... }:
 
 {
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+  };
+
   programs.bash = {
     enable = true;
     bashrcExtra = ''

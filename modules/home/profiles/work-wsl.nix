@@ -3,6 +3,8 @@
 let
   githubSecretFile = ../../../secrets/work-wsl-github-hosts.yml.age;
   githubSecretExists = builtins.pathExists githubSecretFile;
+  teaSecretFile = ../../../secrets/work-wsl-tea-config.yml.age;
+  teaSecretExists = builtins.pathExists teaSecretFile;
 in
 
 {
@@ -10,6 +12,13 @@ in
 
   age.secrets.workGithubHosts = lib.mkIf githubSecretExists {
     file = githubSecretFile;
+    owner = "andrea";
+    group = "users";
+    mode = "0400";
+  };
+
+  age.secrets.workTeaConfig = lib.mkIf teaSecretExists {
+    file = teaSecretFile;
     owner = "andrea";
     group = "users";
     mode = "0400";
@@ -28,12 +37,44 @@ in
   home-manager.users.andrea = { config, ... }: {
     imports = [ ../common ];
 
-    programs.bash.shellAliases = {
-      agenix-work = "agenix -i ~/.config/agenix/work-wsl.agekey";
+    programs.git = {
+      enable = true;
+      includes = [
+        {
+          condition = "gitdir:/etc/nixos/";
+          path = "~/.gitconfig-github";
+        }
+      ];
+      settings = {
+        user.name = "Andrea Segalotti";
+        user.email = "asegalotti@omegagruppo.it";
+        safe.directory = "/etc/nixos";
+        credential."https://git.omegagruppo.it".helper = "!tea login helper";
+      };
     };
+
+    programs.bash.shellAliases = {
+      agenix-work = "sudo EDITOR=nvim VISUAL=nvim agenix -i /etc/agenix/work-wsl.agekey";
+    };
+
+    home.file.".gitconfig-github".text = ''
+      [user]
+        name = Andrea Segalotti
+        email = 249976131+asegalotti@users.noreply.github.com
+
+      [credential "https://github.com"]
+        helper = !/run/current-system/sw/bin/gh auth git-credential
+
+      [credential "https://gist.github.com"]
+        helper = !/run/current-system/sw/bin/gh auth git-credential
+    '';
 
     xdg.configFile."gh/hosts.yml" = lib.mkIf githubSecretExists {
       source = config.lib.file.mkOutOfStoreSymlink "/run/agenix/workGithubHosts";
+    };
+
+    xdg.configFile."tea/config.yml" = lib.mkIf teaSecretExists {
+      source = config.lib.file.mkOutOfStoreSymlink "/run/agenix/workTeaConfig";
     };
 
     home.stateVersion = "24.11";

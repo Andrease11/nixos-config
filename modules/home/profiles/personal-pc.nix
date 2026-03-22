@@ -29,7 +29,7 @@ in
     imports = [ ../common ];
 
     programs.bash.shellAliases = {
-      agenix-personal = "agenix -i ~/.config/agenix/personal-pc.agekey";
+      agenix-personal = "sudo EDITOR=nvim VISUAL=nvim agenix -i /etc/agenix/personal-pc.agekey";
     };
 
     xdg.configFile."gh/hosts.yml" = lib.mkIf githubSecretExists {

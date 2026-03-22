@@ -13,8 +13,8 @@ This directory contains host-specific secrets encrypted with `agenix`.
 - Each host has its own private `age` key.
 - `personal-pc` can decrypt only secrets encrypted for `personal-pc`.
 - `work-wsl` can decrypt only secrets encrypted for `work-wsl`.
-- Keep the user copy of keys in `~/.config/agenix/*.agekey` for backup and editing.
-- Copy the matching key to `/etc/agenix/*.agekey` on each machine so NixOS can decrypt at activation time.
+- Keep the active machine copy in `/etc/agenix/*.agekey`.
+- Store backups outside the machine in a secure vault like KeePassXC, 1Password, Bitwarden, or encrypted removable storage.
 
 ## Initial setup
 
@@ -45,6 +45,8 @@ sudo install -m 600 ~/.config/agenix/work-wsl.agekey /etc/agenix/work-wsl.agekey
 
 Run only the command that matches the current host.
 
+After saving the key content in your external backup, you can remove the copy from `~/.config/agenix/` and keep only `/etc/agenix/*.agekey` on the machine.
+
 ## Create or edit a secret
 
 Use the host-specific alias from the matching machine:
@@ -54,7 +56,7 @@ agenix-personal -e secrets/personal-pc-github-hosts.yml.age
 agenix-work -e secrets/work-wsl-github-hosts.yml.age
 ```
 
-Paste the plaintext secret into the editor, save, and exit. `agenix` writes the encrypted `.age` file directly.
+Paste the plaintext secret into the editor, save, and exit. `agenix` writes the encrypted `.age` file directly. These aliases use `sudo` and the runtime key from `/etc/agenix/`.
 
 Example GitHub secret:
 
@@ -83,20 +85,16 @@ If you replace `personal-pc` or `work-wsl`, you do not need to re-encrypt the se
 
 On the new machine:
 
-1. Copy the right private key from your backup into `~/.config/agenix/`.
-2. Install the same key into `/etc/agenix/`.
+1. Restore the right private key from your external backup.
+2. Install it into `/etc/agenix/`.
 3. Rebuild the matching host config.
 
 Example for a replacement `work-wsl` machine:
 
 ```bash
-mkdir -p ~/.config/agenix
-chmod 700 ~/.config/agenix
-nano ~/.config/agenix/work-wsl.agekey
-chmod 600 ~/.config/agenix/work-wsl.agekey
-
 sudo install -d -m 700 /etc/agenix
-sudo install -m 600 ~/.config/agenix/work-wsl.agekey /etc/agenix/work-wsl.agekey
+sudo nano /etc/agenix/work-wsl.agekey
+sudo chmod 600 /etc/agenix/work-wsl.agekey
 sudo nixos-rebuild switch --flake .#work-wsl
 ```
 
