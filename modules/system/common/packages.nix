@@ -27,6 +27,8 @@ in
     uv
     unzip
     rustup
+    playwright
+    playwright-test
     dotnet-runtime_9
     dotnet-aspnetcore_8
     csharpier

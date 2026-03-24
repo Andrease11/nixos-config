@@ -9,8 +9,6 @@
     gnomeExtensions.clipboard-indicator
     android-studio
     lutris
-    playwright
-    playwright-test
     rpcs3
     heroic
     bluez
