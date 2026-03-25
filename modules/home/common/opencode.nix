@@ -6,7 +6,14 @@
     mcp = {
       playwright = {
         type = "local";
-        command = [ "npx" "-y" "@playwright/mcp@latest" ];
+        command = [
+          "npx"
+          "-y"
+          "@playwright/mcp@latest"
+          "--headless"
+          "--executable-path"
+          "/run/current-system/sw/bin/chromium"
+        ];
         enabled = true;
       };
     };

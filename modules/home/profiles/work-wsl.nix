@@ -8,6 +8,8 @@ let
 in
 
 {
+  imports = [ ./andrea-common.nix ];
+
   age.identityPaths = [ "/etc/agenix/work-wsl.agekey" ];
 
   age.secrets.workGithubHosts = lib.mkIf githubSecretExists {
@@ -25,18 +27,10 @@ in
   };
 
   users.users.andrea = {
-    isNormalUser = true;
-    description = "Andrea Segalotti";
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "docker" ];
   };
 
-  systemd.tmpfiles.rules = [
-    "d /etc/agenix 0700 root root -"
-  ];
-
   home-manager.users.andrea = { config, ... }: {
-    imports = [ ../common ];
-
     programs.git = {
       enable = true;
       includes = [
@@ -76,14 +70,5 @@ in
     xdg.configFile."tea/config.yml" = lib.mkIf teaSecretExists {
       source = config.lib.file.mkOutOfStoreSymlink "/run/agenix/workTeaConfig";
     };
-
-    home.stateVersion = "24.11";
-    home.file."nixos".source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos";
   };
-
-  home-manager.backupFileExtension = "backup";
-
-  programs.nix-ld.enable = true;
-  nixpkgs.config.android_sdk.accept_license = true;
-  nixpkgs.config.allowUnfree = true;
 }
