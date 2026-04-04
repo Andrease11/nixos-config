@@ -2,8 +2,7 @@
 
 let
   pkgsUnstable = import inputs.nixpkgs-unstable {
-    system = pkgs.system;
-    config = pkgs.config;
+    inherit (pkgs) system config;
   };
   csharpierNet9 = pkgs.writeShellScriptBin "csharpier-net9" ''
     export DOTNET_ROOT="/run/current-system/sw/share/dotnet"
@@ -12,28 +11,34 @@ let
   '';
 in
 {
-  environment.systemPackages = with pkgs; [
-    wget
-    git
-    gh
-    gcc
-    tmux
-    nix
-    devenv
-    claude-code
-    nodejs
-    pnpm
-    python313
-    uv
-    unzip
-    rustup
-    playwright
-    playwright-test
-    dotnet-runtime_9
-    dotnet-aspnetcore_8
-    csharpier
-    csharpierNet9
-  ] ++ [
-    pkgsUnstable.opencode
-  ];
+  environment.systemPackages =
+    with pkgs;
+    [
+      wget
+      git
+      gh
+      gcc
+      tmux
+      nix
+      devenv
+      claude-code
+      nodejs
+      pnpm
+      python313
+      uv
+      unzip
+      rustup
+      playwright
+      playwright-test
+      nixd
+      nixfmt-rfc-style
+      statix
+      dotnet-runtime_9
+      dotnet-aspnetcore_8
+      csharpier
+      csharpierNet9
+    ]
+    ++ [
+      pkgsUnstable.opencode
+    ];
 }
