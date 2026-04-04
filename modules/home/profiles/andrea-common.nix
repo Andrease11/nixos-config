@@ -1,4 +1,4 @@
-{ ... }:
+_:
 
 {
   users.users.andrea = {
@@ -10,12 +10,14 @@
     "d /etc/agenix 0700 root root -"
   ];
 
-  home-manager.users.andrea = { config, ... }: {
-    imports = [ ../common ];
+  home-manager.users.andrea =
+    { config, ... }:
+    {
+      imports = [ ../common ];
 
-    home.stateVersion = "24.11";
-    home.file."nixos".source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos";
-  };
+      home.stateVersion = "24.11";
+      home.file."nixos".source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos";
+    };
 
   home-manager.backupFileExtension = "backup";
 

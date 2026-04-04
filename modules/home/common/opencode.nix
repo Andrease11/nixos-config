@@ -3,6 +3,29 @@
 let
   opencodeBinary = "/run/current-system/sw/bin/opencode";
   opencodeProfileDir = "${config.home.homeDirectory}/.config/opencode/profiles";
+  mkProfile =
+    { playwright, mssql_reader }:
+    builtins.toJSON {
+      "$schema" = "https://opencode.ai/config.json";
+      mcp = {
+        playwright.enabled = playwright;
+        mssql_reader.enabled = mssql_reader;
+      };
+    };
+  profiles = {
+    base = {
+      playwright = false;
+      mssql_reader = false;
+    };
+    frontend = {
+      playwright = true;
+      mssql_reader = false;
+    };
+    backend = {
+      playwright = false;
+      mssql_reader = true;
+    };
+  };
   opencodeProfileLauncher = pkgs.writeShellScriptBin "opencode-profile" ''
     profile=""
 
@@ -50,82 +73,64 @@ in
     ocr = opencodeBinary;
   };
 
-  xdg.configFile."opencode/opencode.json".text = builtins.toJSON {
-    "$schema" = "https://opencode.ai/config.json";
-    mcp = {
-      playwright = {
-        type = "local";
-        command = [
-          "npx"
-          "-y"
-          "@playwright/mcp@latest"
-          "--headless"
-          "--executable-path"
-          "/run/current-system/sw/bin/chromium"
-        ];
-        enabled = false;
-      };
-
-      mssql_reader = {
-        type = "local";
-        command = [
-          "npx"
-          "-y"
-          "@connorbritain/mssql-mcp-reader@latest"
-        ];
-        environment = {
-          ENVIRONMENTS_CONFIG_PATH = "${config.home.homeDirectory}/.config/opencode/mssql-environments.json";
+  xdg.configFile = {
+    "opencode/opencode.json".text = builtins.toJSON {
+      "$schema" = "https://opencode.ai/config.json";
+      mcp = {
+        playwright = {
+          type = "local";
+          command = [
+            "npx"
+            "-y"
+            "@playwright/mcp@latest"
+            "--headless"
+            "--executable-path"
+            "/run/current-system/sw/bin/chromium"
+          ];
+          enabled = false;
         };
-        enabled = false;
+
+        mssql_reader = {
+          type = "local";
+          command = [
+            "npx"
+            "-y"
+            "@connorbritain/mssql-mcp-reader@latest"
+          ];
+          environment = {
+            ENVIRONMENTS_CONFIG_PATH = "${config.home.homeDirectory}/.config/opencode/mssql-environments.json";
+          };
+          enabled = false;
+        };
       };
     };
-  };
 
-  xdg.configFile."opencode/profiles/base.json".text = builtins.toJSON {
-    "$schema" = "https://opencode.ai/config.json";
-    mcp = {
-      playwright.enabled = false;
-      mssql_reader.enabled = false;
-    };
-  };
-
-  xdg.configFile."opencode/profiles/frontend.json".text = builtins.toJSON {
-    "$schema" = "https://opencode.ai/config.json";
-    mcp = {
-      playwright.enabled = true;
-      mssql_reader.enabled = false;
-    };
-  };
-
-  xdg.configFile."opencode/profiles/backend.json".text = builtins.toJSON {
-    "$schema" = "https://opencode.ai/config.json";
-    mcp = {
-      playwright.enabled = false;
-      mssql_reader.enabled = true;
-    };
-  };
-
-  xdg.configFile."opencode/mssql-environments.json".text = builtins.toJSON {
-    defaultEnvironment = "emerson";
-    secrets = {
-      providers = [
+    "opencode/mssql-environments.json".text = builtins.toJSON {
+      defaultEnvironment = "emerson";
+      secrets = {
+        providers = [
+          {
+            type = "env";
+          }
+        ];
+      };
+      environments = [
         {
-          type = "env";
+          name = "emerson";
+          server = "NBASEGALOTTI";
+          database = "EMERSON";
+          authMode = "sql";
+          username = "sa";
+          password = "\${secret:SQL_SA_PASSWORD}";
+          trustServerCertificate = true;
+          readonly = true;
+          description = "SQL Server locale Emerson";
         }
       ];
     };
-    environments = [
-      {
-        name = "emerson";
-        server = "NBASEGALOTTI";
-        database = "EMERSON";
-        authMode = "sql";
-        username = "sa";
-        password = "\${secret:SQL_SA_PASSWORD}";
-        trustServerCertificate = true;
-        readonly = true;
-        description = "SQL Server locale Emerson";
-      }
-    ];
+
+    "opencode/profiles/backend.json".text = mkProfile profiles.backend;
+    "opencode/profiles/base.json".text = mkProfile profiles.base;
+    "opencode/profiles/frontend.json".text = mkProfile profiles.frontend;
   };
 }
