@@ -25,9 +25,9 @@ return {
       {
         "<leader>gd",
         function()
-          vim.cmd("DiffviewOpen " .. diff_base() .. "...HEAD")
+          vim.cmd("DiffviewOpen " .. diff_base())
         end,
-        desc = "Diff vs base branch",
+        desc = "Diff vs remote base",
       },
       { "<leader>gD", "<cmd>DiffviewClose<cr>", desc = "Close Diffview" },
       { "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", desc = "File history" },
