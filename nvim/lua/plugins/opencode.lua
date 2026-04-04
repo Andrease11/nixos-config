@@ -89,15 +89,45 @@ return {
       "<leader>to",
       function()
         local Terminal = require("toggleterm.terminal").Terminal
-        local opencode_term = Terminal:new({
-          cmd = "opencode",
-          direction = "float",
-          close_on_exit = false,
-          on_open = function(term)
-            vim.cmd("startinsert!")
+        local profiles = {
+          {
+            label = "base",
+            description = "Shared config without extra MCPs",
+            cmd = "opencode-profile --profile base",
+          },
+          {
+            label = "frontend",
+            description = "Playwright MCP enabled",
+            cmd = "opencode-profile --profile frontend",
+          },
+          {
+            label = "backend",
+            description = "SQL Server MCP enabled",
+            cmd = "opencode-profile --profile backend",
+          },
+        }
+
+        vim.ui.select(profiles, {
+          prompt = "OpenCode profile",
+          format_item = function(item)
+            return string.format("%s - %s", item.label, item.description)
           end,
-        })
-        opencode_term:toggle()
+        }, function(choice)
+          if not choice then
+            return
+          end
+
+          local opencode_term = Terminal:new({
+            cmd = choice.cmd,
+            direction = "float",
+            close_on_exit = false,
+            on_open = function(term)
+              vim.cmd("startinsert!")
+            end,
+          })
+
+          opencode_term:toggle()
+        end)
       end,
       desc = "Open OpenCode in floating terminal",
     },
