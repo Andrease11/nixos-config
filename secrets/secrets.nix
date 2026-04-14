@@ -5,5 +5,6 @@ in
 {
   "secrets/personal-pc-github-hosts.yml.age".publicKeys = [ personalPc ];
   "secrets/work-wsl-github-hosts.yml.age".publicKeys = [ workWsl ];
+  "secrets/work-wsl-sql-mcp-password.age".publicKeys = [ workWsl ];
   "secrets/work-wsl-tea-config.yml.age".publicKeys = [ workWsl ];
 }

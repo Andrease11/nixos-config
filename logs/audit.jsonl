@@ -1,0 +1,11 @@
+{"timestamp":"2026-04-14T12:27:27.042Z","toolName":"test_connection","environment":"OG-WKS0060-0326","result":{"success":true},"durationMs":95,"sessionId":"907e2fa2-4412-429c-9fd1-31055955b9c3"}
+{"timestamp":"2026-04-14T12:27:27.092Z","toolName":"read_data","environment":"OG-WKS0060-0326","result":{"success":true,"recordCount":20},"durationMs":144,"sessionId":"907e2fa2-4412-429c-9fd1-31055955b9c3"}
+{"timestamp":"2026-04-14T12:28:16.577Z","toolName":"read_data","environment":"OG-WKS0060-0326","result":{"success":true,"recordCount":18},"durationMs":101,"sessionId":"907e2fa2-4412-429c-9fd1-31055955b9c3"}
+{"timestamp":"2026-04-14T12:28:53.176Z","toolName":"read_data","environment":"OG-WKS0060-0326","result":{"success":false,"error":"SECURITY_VALIDATION_FAILED"},"durationMs":11,"sessionId":"907e2fa2-4412-429c-9fd1-31055955b9c3"}
+{"timestamp":"2026-04-14T12:28:59.245Z","toolName":"read_data","environment":"OG-WKS0060-0326","result":{"success":false,"error":"SECURITY_VALIDATION_FAILED"},"durationMs":4,"sessionId":"907e2fa2-4412-429c-9fd1-31055955b9c3"}
+{"timestamp":"2026-04-14T12:29:04.797Z","toolName":"read_data","environment":"OG-WKS0060-0326","result":{"success":true,"recordCount":20},"durationMs":28,"sessionId":"907e2fa2-4412-429c-9fd1-31055955b9c3"}
+{"timestamp":"2026-04-14T12:29:09.091Z","toolName":"read_data","environment":"OG-WKS0060-0326","result":{"success":false,"error":"SECURITY_VALIDATION_FAILED"},"durationMs":3,"sessionId":"907e2fa2-4412-429c-9fd1-31055955b9c3"}
+{"timestamp":"2026-04-14T12:29:14.229Z","toolName":"read_data","environment":"OG-WKS0060-0326","result":{"success":true,"recordCount":50},"durationMs":45,"sessionId":"907e2fa2-4412-429c-9fd1-31055955b9c3"}
+{"timestamp":"2026-04-14T12:29:26.682Z","toolName":"read_data","environment":"OG-WKS0060-0326","result":{"success":false,"error":"SECURITY_VALIDATION_FAILED"},"durationMs":4,"sessionId":"907e2fa2-4412-429c-9fd1-31055955b9c3"}
+{"timestamp":"2026-04-14T12:29:32.016Z","toolName":"read_data","environment":"OG-WKS0060-0326","result":{"success":false,"error":"SECURITY_VALIDATION_FAILED"},"durationMs":3,"sessionId":"907e2fa2-4412-429c-9fd1-31055955b9c3"}
+{"timestamp":"2026-04-14T12:29:37.976Z","toolName":"read_data","environment":"OG-WKS0060-0326","result":{"success":true,"recordCount":336},"durationMs":137,"sessionId":"907e2fa2-4412-429c-9fd1-31055955b9c3"}

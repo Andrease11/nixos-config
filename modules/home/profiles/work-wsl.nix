@@ -2,6 +2,7 @@
 
 let
   githubSecretFile = ../../../secrets/work-wsl-github-hosts.yml.age;
+  sqlMcpPasswordFile = ../../../secrets/work-wsl-sql-mcp-password.age;
   teaSecretFile = ../../../secrets/work-wsl-tea-config.yml.age;
   mkOptionalAgeSecret =
     file:
@@ -19,6 +20,7 @@ in
   age = {
     identityPaths = [ "/etc/agenix/work-wsl.agekey" ];
     secrets.workGithubHosts = mkOptionalAgeSecret githubSecretFile;
+    secrets.workSqlMcpPassword = mkOptionalAgeSecret sqlMcpPasswordFile;
     secrets.workTeaConfig = mkOptionalAgeSecret teaSecretFile;
   };
 
@@ -64,6 +66,10 @@ in
 
         "gh/hosts.yml" = lib.mkIf (builtins.pathExists githubSecretFile) {
           source = config.lib.file.mkOutOfStoreSymlink "/run/agenix/workGithubHosts";
+        };
+
+        "opencode/secrets/workSqlMcpPassword" = lib.mkIf (builtins.pathExists sqlMcpPasswordFile) {
+          source = config.lib.file.mkOutOfStoreSymlink "/run/agenix/workSqlMcpPassword";
         };
 
         "tea/config.yml" = lib.mkIf (builtins.pathExists teaSecretFile) {

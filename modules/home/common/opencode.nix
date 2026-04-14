@@ -3,6 +3,7 @@
 let
   opencodeBinary = "/run/current-system/sw/bin/opencode";
   opencodeProfileDir = "${config.home.homeDirectory}/.config/opencode/profiles";
+  opencodeSecretsDir = "${config.home.homeDirectory}/.config/opencode/secrets";
   mkProfile =
     { playwright, mssql_reader }:
     builtins.toJSON {
@@ -110,18 +111,19 @@ in
       secrets = {
         providers = [
           {
-            type = "env";
+            directory = opencodeSecretsDir;
+            type = "file";
           }
         ];
       };
       environments = [
         {
-          name = "emerson";
-          server = "NBASEGALOTTI";
+          name = "OG-WKS0060-0326";
+          server = "OG-WKS0060-0326";
           database = "EMERSON";
           authMode = "sql";
           username = "sa";
-          password = "\${secret:SQL_SA_PASSWORD}";
+          password = "\${secret:workSqlMcpPassword}";
           trustServerCertificate = true;
           readonly = true;
           description = "SQL Server locale Emerson";
