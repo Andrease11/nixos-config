@@ -3,30 +3,37 @@
 let
   opencodeBinary = "/run/current-system/sw/bin/opencode";
   opencodeProfileDir = "${config.home.homeDirectory}/.config/opencode/profiles";
-  opencodeSecretsDir = "${config.home.homeDirectory}/.config/opencode/secrets";
+  workSqlMcpPasswordPath = "/run/agenix/workSqlMcpPassword";
   mkProfile =
-    { playwright, mssql_reader }:
+    { playwright, dbhub }:
     builtins.toJSON {
       "$schema" = "https://opencode.ai/config.json";
       mcp = {
         playwright.enabled = playwright;
-        mssql_reader.enabled = mssql_reader;
+        dbhub.enabled = dbhub;
       };
     };
   profiles = {
     base = {
       playwright = false;
-      mssql_reader = false;
+      dbhub = false;
     };
     frontend = {
       playwright = true;
-      mssql_reader = false;
+      dbhub = false;
     };
     backend = {
       playwright = false;
-      mssql_reader = true;
+      dbhub = true;
     };
   };
+  dbhubBinary = pkgs.writeShellScriptBin "opencode-dbhub-mssql" ''
+    if [ -r "${workSqlMcpPasswordPath}" ]; then
+      export DB_PASSWORD="$(tr -d '\n' < "${workSqlMcpPasswordPath}")"
+    fi
+
+    exec ${pkgs.lib.getExe' pkgs.nodejs "npx"} -y @bytebase/dbhub@latest --transport stdio --config "${config.home.homeDirectory}/.config/opencode/dbhub.toml"
+  '';
   opencodeProfileLauncher = pkgs.writeShellScriptBin "opencode-profile" ''
     profile=""
 
@@ -66,7 +73,10 @@ let
 in
 
 {
-  home.packages = [ opencodeProfileLauncher ];
+  home.packages = [
+    dbhubBinary
+    opencodeProfileLauncher
+  ];
 
   programs.bash.shellAliases = {
     opencode = "opencode-profile";
@@ -91,45 +101,39 @@ in
           enabled = false;
         };
 
-        mssql_reader = {
+        dbhub = {
           type = "local";
           command = [
-            "npx"
-            "-y"
-            "@connorbritain/mssql-mcp-reader@latest"
+            "${pkgs.lib.getExe dbhubBinary}"
           ];
-          environment = {
-            ENVIRONMENTS_CONFIG_PATH = "${config.home.homeDirectory}/.config/opencode/mssql-environments.json";
-          };
           enabled = false;
         };
       };
     };
 
-    "opencode/mssql-environments.json".text = builtins.toJSON {
-      defaultEnvironment = "emerson";
-      secrets = {
-        providers = [
-          {
-            directory = opencodeSecretsDir;
-            type = "file";
-          }
-        ];
-      };
-      environments = [
-        {
-          name = "OG-WKS0060-0326";
-          server = "OG-WKS0060-0326";
-          database = "EMERSON";
-          authMode = "sql";
-          username = "sa";
-          password = "\${secret:workSqlMcpPassword}";
-          trustServerCertificate = true;
-          readonly = true;
-          description = "SQL Server locale Emerson";
-        }
-      ];
-    };
+    "opencode/dbhub.toml".text = ''
+      [[sources]]
+      id = "emerson"
+      description = "SQL Server locale Emerson"
+      type = "sqlserver"
+      host = "OG-WKS0060-0326"
+      port = 1433
+      database = "EMERSON"
+      user = "sa"
+      password = "''${DB_PASSWORD}"
+      sslmode = "require"
+      query_timeout = 60
+
+      [[tools]]
+      name = "execute_sql"
+      source = "emerson"
+      readonly = true
+      max_rows = 1000
+
+      [[tools]]
+      name = "search_objects"
+      source = "emerson"
+    '';
 
     "opencode/profiles/backend.json".text = mkProfile profiles.backend;
     "opencode/profiles/base.json".text = mkProfile profiles.base;

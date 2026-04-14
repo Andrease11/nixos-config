@@ -68,10 +68,6 @@ in
           source = config.lib.file.mkOutOfStoreSymlink "/run/agenix/workGithubHosts";
         };
 
-        "opencode/secrets/workSqlMcpPassword" = lib.mkIf (builtins.pathExists sqlMcpPasswordFile) {
-          source = config.lib.file.mkOutOfStoreSymlink "/run/agenix/workSqlMcpPassword";
-        };
-
         "tea/config.yml" = lib.mkIf (builtins.pathExists teaSecretFile) {
           source = config.lib.file.mkOutOfStoreSymlink "/run/agenix/workTeaConfig";
         };
