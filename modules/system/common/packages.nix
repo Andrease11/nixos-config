@@ -20,7 +20,6 @@ in
       gcc
       tmux
       nix
-      devenv
       claude-code
       nodejs
       pnpm
@@ -39,6 +38,7 @@ in
       csharpierNet9
     ]
     ++ [
+      pkgsUnstable.devenv
       pkgsUnstable.opencode
     ];
 }

@@ -49,6 +49,7 @@ in
 
       programs.bash.shellAliases = {
         agenix-work = "sudo EDITOR=nvim VISUAL=nvim agenix -i /etc/agenix/work-wsl.agekey";
+        wclienti = "cd /mnt/c/Workarea_git/clienti";
       };
 
       xdg.configFile = {
