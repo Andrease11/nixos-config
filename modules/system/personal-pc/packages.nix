@@ -13,5 +13,6 @@
     heroic
     bluez
     exercism
+    nest-cli
   ];
 }
