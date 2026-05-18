@@ -1,4 +1,4 @@
-_:
+{ inputs, ... }:
 
 {
   users.users.andrea = {
@@ -18,6 +18,8 @@ _:
       home.stateVersion = "24.11";
       home.file."nixos".source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos";
     };
+
+  home-manager.extraSpecialArgs = { inherit inputs; };
 
   home-manager.backupFileExtension = "backup";
 

@@ -1,7 +1,10 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 let
-  opencodeBinary = "/run/current-system/sw/bin/opencode";
+  pkgsUnstable = import inputs.nixpkgs-unstable {
+    inherit (pkgs) system config;
+  };
+  opencodeBinary = pkgs.lib.getExe pkgsUnstable.opencode;
   opencodeProfileDir = "${config.home.homeDirectory}/.config/opencode/profiles";
   workSqlMcpPasswordPath = "/run/agenix/workSqlMcpPassword";
   mkProfile =
